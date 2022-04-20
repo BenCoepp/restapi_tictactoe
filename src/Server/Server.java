@@ -1,24 +1,42 @@
 package Server;
 import java.net.*;
+
+import org.junit.Test;
+
+import Client.Client;
+
 import java.io.*;
 
-public class Server {
+public class Server extends Thread{
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
-
-    public void start(int port) throws IOException {
-        serverSocket = new ServerSocket(port);
-        clientSocket = serverSocket.accept();
-        out = new PrintWriter(clientSocket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    
+    public Server (Socket socket) {
+    	this.clientSocket = socket;
     }
 
-    public void stop() throws IOException {
-        in.close();
-        out.close();
-        clientSocket.close();
-        serverSocket.close();
+    public void start() {
+        try {
+        	out = new PrintWriter(clientSocket.getOutputStream(), true);
+            in = new BufferedReader(
+              new InputStreamReader(clientSocket.getInputStream()));
+            
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                if (".".equals(inputLine)) {
+                    out.println("bye");
+                    break;
+                }
+                out.println(inputLine);
+            }
+
+            in.close();
+            out.close();
+            clientSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 }
