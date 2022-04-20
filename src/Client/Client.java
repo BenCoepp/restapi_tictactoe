@@ -38,7 +38,7 @@ public class Client {
         client1.startConnection("127.0.0.1", 6666);
         String msg1 = client1.sendMessage("hello");
         String msg2 = client1.sendMessage("world");
-        String terminate = client1.sendMessage(".");
+        String terminate = client1.sendMessage("{\"requestType\":\"STOP\"}");
         System.out.println(msg1);
         System.out.println(msg2);
         System.out.println(terminate);
@@ -46,7 +46,7 @@ public class Client {
         client2.startConnection("127.0.0.1", 6666);
         String msgClient1 = client2.sendMessage("hello");
         String msgClient2 = client2.sendMessage("world");
-        String terminateClient = client2.sendMessage(".");
+        String terminateClient = client2.sendMessage("{\"requestType\":\"STOP\"}");
         System.out.println(msgClient1);
         System.out.println(msgClient2);
         System.out.println(terminateClient);

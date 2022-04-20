@@ -25,8 +25,8 @@ public class Server extends Thread{
             
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                if (".".equals(inputLine)) {
-                    out.println("bye");
+                if ("{\"requestType\":\"STOP\"}".equals(inputLine)) {
+                    out.println("{\"response\":\"OK\"}");
                     break;
                 }
                 out.println(inputLine);
