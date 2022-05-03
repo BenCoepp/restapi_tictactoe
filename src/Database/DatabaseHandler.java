@@ -2,6 +2,7 @@ package Database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseHandler {
@@ -13,7 +14,36 @@ public class DatabaseHandler {
 	String databasePass = "root";
 	
 	private Connection getConnection() throws SQLException {
-		Connection con = DriverManager.getConnection("jdbc:mariadb://" + databaseUrl + ":"+ databasePort +"/"+ databaseName, databaseUser, databasePass);
+		con = DriverManager.getConnection("jdbc:mariadb://" + databaseUrl + ":"+ databasePort +"/"+ databaseName, databaseUser, databasePass);
 		return con;
+	}
+	
+	public boolean initDB() throws SQLException {
+		con = getConnection();
+		String sqlUser = "IF NOT EXISTS (SELECT * FROM sys.table WHERE NAME = 'USER' ) CREATE TABLE USER ("
+				+ " userID int,"
+				+ " userName varchar(255),"
+				+ " password varchar(255),"
+				+ ")";
+		String sqlGame = "IF NOT EXISTS (SELECT * FROM sys.table WHERE NAME = 'GAME' ) CREATE TABLE GAME ("
+				+ " gameID int,"
+				+ " user1 int,"
+				+ " user2 int,"
+				+ " whoWon varchar(255),"
+				+ " key varchar(255)"
+				+ ")";
+		try(PreparedStatement pStmt = con.prepareStatement(sqlGame)){
+			if(!pStmt.execute()) {
+				System.out.println("A problem has accured");
+				return false;
+			}
+		}
+		try(PreparedStatement pStmt = con.prepareStatement(sqlUser)){
+			if(!pStmt.execute()) {
+				System.out.println("A problem has accured");
+				return false;
+			}
+		}
+		return true;
 	}
 }
