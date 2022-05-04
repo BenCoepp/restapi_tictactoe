@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import org.mariadb.jdbc.Driver;
 
 public class DatabaseHandler {
 	Connection con;
@@ -13,7 +14,7 @@ public class DatabaseHandler {
 	String databaseUser = "dev";
 	String databasePass = "root";
 	
-	private Connection getConnection() throws SQLException {
+	public Connection getConnection() throws SQLException {
 		con = DriverManager.getConnection("jdbc:mariadb://" + databaseUrl + ":"+ databasePort +"/"+ databaseName, databaseUser, databasePass);
 		return con;
 	}
